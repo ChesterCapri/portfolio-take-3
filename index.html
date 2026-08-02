@@ -405,7 +405,7 @@
     width: 42%; height: 42%;
     object-fit: contain;
     border-radius: 22%;
-    box-shadow: 0 10px 20px rgba(43,36,32,0.22);
+    
   }
 
   /* project media — custom line-art icon tile (used when no screenshot exists yet) */
@@ -587,7 +587,8 @@
   }
   .project-card[data-status="development"] .project-status{ background: var(--mustard); }
   .project-card[data-status="completed"] .project-status{ background: var(--sage); color: var(--cream); }
-  .project-card[data-status="planning"] .project-status{ background: var(--powder); color: var(--cream); }
+  .project-card[data-status="completed"] .project-status:hover{ background:#0B630A ; color: var(--cream); cursor: pointer;}
+  .project-card[data-status="planning"] .project-status{ background: var(--powder); color: var(--cream);  }
   .project-title{ font-family: var(--serif); font-weight: 600; font-size: 1.4rem; margin-bottom: 4px; }
   .project-subtitle{
     font-family: var(--mono);
@@ -1074,7 +1075,8 @@
       tags: ["React Native", "Expo", "..."],
       github: "https://github.com/ChesterCapri/MaiserTracker",
       demo: "construction.html",
-      media: { type: "image", src: "assets/tithes-icon.png", bg: "var(--cream)", caption: "Fig. 1 — App Icon" }
+      media: { type: "image", src: "assets/tithes-icon.png", bg: "var(--cream)", caption: "Fig. 1 — App Icon" },
+      storeLink: "https://apps.apple.com/us/app/tithes/id6774402353"
     },
 
     {
@@ -1128,7 +1130,7 @@
     }
     if (p.media.type === "image"){
       return `
-        <div class="project-media-icon-img" style="background:${p.media.bg}">
+        <div class="project-media-icon-img" style="background:${"#0B630A"}">
           <img src="${p.media.src}" alt="${p.title} icon">
         </div>
         <span class="project-media-caption">${p.media.caption}</span>
@@ -1152,7 +1154,7 @@
       <div class="project-media">
         ${renderMedia(p, i)}
       </div>
-      <span class="project-status">${p.statusLabel}</span>
+      <a class="project-status" href="${p.storeLink}" target="_blank">${p.statusLabel}</a>
       <h3 class="project-title">${p.title}</h3>
       <p class="project-subtitle">${p.subtitle}</p>
       <p class="project-desc">${p.description}</p>
