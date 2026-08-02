@@ -26,6 +26,8 @@
     --sage-deep: #616E56;
     --powder: #5C7A93;
     --powder-deep: #46617A;
+    --dusty: #D9A0A0;
+    --dusty-deep: #C98A83;
     --line: rgba(43,36,32,0.28);
     --shadow: rgba(43,36,32,0.18);
 
@@ -372,6 +374,7 @@
     height: 168px;
     margin: 0 auto 20px;
     border-radius: 50%;
+    overflow: hidden;
     background:
       repeating-linear-gradient(45deg, var(--parchment-deep), var(--parchment-deep) 6px, var(--cream) 6px, var(--cream) 12px);
     border: 1px solid var(--ink);
@@ -385,6 +388,34 @@
     letter-spacing: 0.08em;
     color: var(--ink-soft);
     text-transform: uppercase;
+  }
+  .about-photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* project media — app-icon style tile (real icon image, e.g. an App Store icon) */
+  .project-media-icon-img{
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .project-media-icon-img img{
+    width: 42%; height: 42%;
+    object-fit: contain;
+    border-radius: 22%;
+    box-shadow: 0 10px 20px rgba(43,36,32,0.22);
+  }
+
+  /* project media — custom line-art icon tile (used when no screenshot exists yet) */
+  .project-media-icon{
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .project-media-icon svg{
+    width: 38%;
+    height: 38%;
   }
   .about-caption{
     font-family: var(--mono);
@@ -814,8 +845,8 @@
         <h2 class="section-title reveal">About Me</h2>
 
         <div class="about-card reveal">
-          <div class="about-photo">Your Photo</div>
-          <div class="about-caption">Fig. 1 — Author, at desk</div>
+          <div class="about-photo"><img src="assets/profile.jpg" alt="Joseph D. Nemani"></div>
+          <div class="about-caption">Fig. 1 — Author, at the whiteboard</div>
 
           <p class="about-bio">
             Hello 👋 I'm <strong>Joseph</strong>. I like taking a half-formed idea, breaking it into
@@ -1042,7 +1073,8 @@
       description: "An easy, convenient way to track ten percent of your income to designate for charitable usage. ",
       tags: ["React Native", "Expo", "..."],
       github: "https://github.com/ChesterCapri/MaiserTracker",
-      demo: "#"
+      demo: "construction.html",
+      media: { type: "image", src: "assets/tithes-icon.png", bg: "var(--cream)", caption: "Fig. 1 — App Icon" }
     },
 
     {
@@ -1053,7 +1085,14 @@
       description: "A mobile application that helps couples plan and discover date activities nearby — from generating ideas to saving favorites for later.",
       tags: ["React Native", "Expo", "Firebase", "REST API"],
       github: "#",
-      demo: "#"
+      demo: "construction.html",
+      media: {
+        type: "icon", bg: "var(--dusty)", caption: "Fig. 2 — Concept Icon",
+        svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 14 C36 14 25 25 25 39 C25 58 50 86 50 86 C50 86 75 58 75 39 C75 25 64 14 50 14 Z" stroke="#FBF6EA" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M50 47 C47 41 40 41 40 34 C40 29 44 26 50 31 C56 26 60 29 60 34 C60 41 53 41 50 47 Z" fill="#FBF6EA"/>
+        </svg>`
+      }
     },
 
     {
@@ -1064,17 +1103,54 @@
       description: "Replace this text with a short, specific description of what the project does and why you built it.",
       tags: ["Tech", "Stack", "Here"],
       github: "#",
-      demo: "#"
+      demo: "construction.html",
+      media: {
+        type: "icon", bg: "var(--sage)", caption: "Fig. 3 — Concept Icon",
+        svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 24 H84 C87 24 89 26 89 29 V64 C89 67 87 69 84 69 H40 L24 84 V69 H16 C13 69 11 67 11 64 V29 C11 26 13 24 16 24 Z" stroke="#FBF6EA" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M24 47 C30 47 30 38 36 38 C42 38 42 55 48 55 C54 55 54 40 60 40 C66 40 66 47 72 47" stroke="#FBF6EA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M74 18 L77 24 L83 25 L77 27 L74 33 L71 27 L65 25 L71 24 Z" fill="#FBF6EA"/>
+        </svg>`
+      }
     }
   ];
+
+  // Renders the media box for a project card: a real screenshot/icon image,
+  // a custom line-art icon tile, or (if `media` is omitted entirely) the
+  // original hatch-pattern placeholder — so old project entries still work
+  // without needing a media field.
+  function renderMedia(p, i){
+    if (!p.media){
+      return `
+        <span class="project-tape"></span>
+        <span class="project-media-caption">Fig. ${i + 1} — Screenshot</span>
+      `;
+    }
+    if (p.media.type === "image"){
+      return `
+        <div class="project-media-icon-img" style="background:${p.media.bg}">
+          <img src="${p.media.src}" alt="${p.title} icon">
+        </div>
+        <span class="project-media-caption">${p.media.caption}</span>
+      `;
+    }
+    if (p.media.type === "icon"){
+      return `
+        <div class="project-media-icon" style="background:${p.media.bg}">
+          ${p.media.svg}
+        </div>
+        <span class="project-media-caption">${p.media.caption}</span>
+      `;
+    }
+    return "";
+  }
 
   const grid = document.getElementById("projectsGrid");
   grid.innerHTML = projects.map((p, i) => `
     <article class="project-card reveal" data-status="${p.status}">
       <span class="project-pin"></span>
       <div class="project-media">
-        <span class="project-tape"></span>
-        <span class="project-media-caption">Fig. ${i + 1} — Screenshot</span>
+        ${renderMedia(p, i)}
       </div>
       <span class="project-status">${p.statusLabel}</span>
       <h3 class="project-title">${p.title}</h3>
